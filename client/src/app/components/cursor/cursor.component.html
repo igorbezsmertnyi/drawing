@@ -1,0 +1,9 @@
+<div 
+  class="cursor-label"
+  [ngStyle]="{
+    'transform': 'translate('+ (mousePosition?.posX - 60) +'px, '+ (mousePosition?.posY + 10) +'px)'
+  }"
+>
+  <p>x: {{ mousePosition?.posX }}</p>
+  <p>y: {{ mousePosition?.posY }}</p>
+</div>
