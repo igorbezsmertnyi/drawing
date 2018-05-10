@@ -1,3 +1,9 @@
-<section class="area" (mousemove)="coordinates($event)">
-
+<section class="area">
+  <canvas 
+    #canv
+    (mousemove)="coordinates($event)"
+    (mousedown)="drawStart()"
+    (mouseup)="drawEnd()"
+    class="area__canvas"
+  ></canvas>
 </section>
