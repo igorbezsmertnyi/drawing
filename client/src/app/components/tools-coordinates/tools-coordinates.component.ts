@@ -1,14 +1,14 @@
-import { Component, Input } from '@angular/core'
+import { Component } from '@angular/core'
 import { MousePosition } from '../../models/MousePosition'
 import { StoreService } from '../../app.store.service'
 
 @Component({
-  selector: 'app-cursor',
-  templateUrl: './cursor.component.html',
-  styleUrls: ['./cursor.component.styl']
+  selector: 'app-tools-coordinates',
+  templateUrl: './tools-coordinates.component.html',
+  styleUrls: ['./tools-coordinates.component.styl']
 })
 
-export class CursorComponent {
+export class ToolsCoordinatesComponent {
   mousePosition: MousePosition
 
   constructor(private st: StoreService) { }

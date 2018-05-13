@@ -1,3 +1,55 @@
-* {
+*
   font-family 'Open Sans', 'Helvatica', 'Arial', sans-serif
-}
+
+.tools-item
+  min-width 80px
+  color #fff
+  margin 0 10px
+  padding 8px 0
+
+  &__header
+    margin-bottom 8px
+    text-align left
+    font-size .7em
+    text-transform: uppercase
+    display block
+
+  &__action
+    &--color
+      width 28px
+      height 28px
+      border-radius 50%
+      overflow hidden
+      border 2px solid #fff
+
+      input
+        height 100%
+        padding 0
+        border 0
+        outline none
+        cursor pointer
+        color: transparent
+
+    &--file
+      label
+        display flex
+        align-items center
+        cursor pointer
+
+      i
+        margin-right 12px
+
+      input
+        display none
+
+  &--input
+    margin-top 4px
+
+  p
+    margin 0
+    color #fff
+    font-size .8em
+    line-height 1
+
+  input
+    font-size 1em

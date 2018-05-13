@@ -1,0 +1,13 @@
+<div class="tools-item">
+  <span class="tools-item__header">Line Weight</span>
+  <div class="tools-item__action">
+    <input 
+      type="number" 
+      placeholder="Line Weight" 
+      min="1" 
+      max="72" 
+      [(ngModel)]="selectedWeight" 
+      (change)="changeLineWeight()" 
+    />
+  </div>
+</div>

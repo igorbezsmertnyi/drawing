@@ -1,0 +1,11 @@
+<div class="tools-item">
+  <span class="tools-item__header">Line Color</span>
+  <div class="tools-item__action tools-item__action--color">
+    <input 
+      [(colorPicker)]="selectedColor" 
+      [style.background]="selectedColor"
+      [cpPosition]="'left'"
+      (colorPickerChange)="changeColor($event)"
+    />
+  </div>
+</div>

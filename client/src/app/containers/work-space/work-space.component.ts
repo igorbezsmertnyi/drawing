@@ -7,16 +7,4 @@ import { MousePosition } from '../../models/MousePosition'
   styleUrls: ['./work-space.component.styl']
 })
 
-export class WorkSpaceComponent {
-  mousePosition: MousePosition = {
-    posX: 0,
-    posY: 0
-  }
-
-  constructor() { }
-
-  mousePositionHandler(e) {
-    this.mousePosition.posX = e.posX
-    this.mousePosition.posY = e.posY
-  }
-}
+export class WorkSpaceComponent { }
