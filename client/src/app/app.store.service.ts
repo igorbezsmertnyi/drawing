@@ -22,6 +22,14 @@ export class StoreService {
     this._lineWeight.next(data)
   }
 
+  //for changing selected color
+  _color = new Subject<string>()
+  color = this._color.asObservable()
+
+  changeColor(data: string) {
+    this._color.next(data)
+  }
+
   //for changing line color
   _lineColor = new Subject<string>()
   lineColor = this._lineColor.asObservable()
@@ -44,5 +52,13 @@ export class StoreService {
 
   changeBgImage(data: string) {
     this._bgImage.next(data)
+  }
+
+  //for changing paint tool
+  _paintTool = new Subject<string>()
+  paintTool = this._paintTool.asObservable()
+
+  changePaintTool(data: string) {
+    this._paintTool.next(data)
   }
 }

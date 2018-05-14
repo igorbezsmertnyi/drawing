@@ -8,12 +8,13 @@ import { NgModule } from '@angular/core'
 //modules
 import { 
   FormsModule, 
-  ReactiveFormsModule 
+  ReactiveFormsModule
 } from '@angular/forms'
 
 import {
   MatSelectModule,
-  MatInputModule
+  MatInputModule,
+  MatTooltipModule
 } from '@angular/material'
 
 import { ColorPickerModule } from 'ngx-color-picker'
@@ -31,9 +32,9 @@ import { CursorComponent } from './components/cursor/cursor.component'
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component'
 import { ToolsCoordinatesComponent } from './components/tools-coordinates/tools-coordinates.component'
 import { ToolsLineWeightComponent } from './components/tools-line-weight/tools-line-weight.component'
-import { ToolsLineColorComponent } from './components/tools-line-color/tools-line-color.component'
-import { ToolsBackgroundColorComponent } from './components/tools-background-color/tools-background-color.component'
 import { ToolsBackgroundImageComponent } from './components/tools-background-image/tools-background-image.component'
+import { ToolsPaintToolsComponent } from './components/tools-paint-tools/tools-paint-tools.component'
+import { ToolsPaletteComponent } from './components/tools-palette/tools-palette.component'
 
 @NgModule({
   declarations: [
@@ -44,9 +45,9 @@ import { ToolsBackgroundImageComponent } from './components/tools-background-ima
     ToolBarComponent,
     ToolsCoordinatesComponent,
     ToolsLineWeightComponent,
-    ToolsLineColorComponent,
-    ToolsBackgroundColorComponent,
-    ToolsBackgroundImageComponent
+    ToolsBackgroundImageComponent,
+    ToolsPaintToolsComponent,
+    ToolsPaletteComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +56,8 @@ import { ToolsBackgroundImageComponent } from './components/tools-background-ima
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    ColorPickerModule
+    ColorPickerModule,
+    MatTooltipModule
   ],
   providers: [
     StoreService

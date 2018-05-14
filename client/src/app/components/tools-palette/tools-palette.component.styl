@@ -1,0 +1,25 @@
+.pallete
+  display flex
+  flex-direction column
+
+  &__selected
+    height 60px
+    margin-right 4px
+    border 1px solid #fff
+    margin-bottom 4px
+    outline none
+    cursor pointer
+    color transparent
+
+  &__color-list
+    display flex
+    flex-flow row wrap
+
+  &__color
+    width 24px
+    height 24px
+    margin 4px
+    cursor pointer
+
+    &:nth-child(4n-7)
+      margin-left 0

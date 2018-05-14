@@ -57,24 +57,38 @@ export class AreaComponent {
     if (!this.proccessing) return
 
     this.ctx.lineWidth = this.drawParm.lineWeight
-    this.ctx.strokeStyle = this.drawParm.lineColor
-    this.ctx.lineCap = 'round'
+    this.ctx.strokeStyle = this.drawParm.color
+    this.ctx.fillStyle = this.drawParm.color
+    this.ctx.lineCap = this.drawParm.lineCap
 
-    this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
+    switch(this.drawParm.paintTool) {
+      case 'pencil':
+        this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
+        break
+      case 'brush':
+        this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
+        break
+      case 'color_fill':
+        this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
+        break
+      case 'eraser':
+        this.ctx.clearRect(
+          this.mousePosition.posX - (this.drawParm.lineWeight / 2), 
+          this.mousePosition.posY - (this.drawParm.lineWeight / 2),
+          this.drawParm.lineWeight, 
+          this.drawParm.lineWeight
+        )
+        break
+    }
+  
     this.ctx.stroke()
   }
 
   private updateParms() {
     this.st.lineWeight.subscribe(e => this.drawParm.lineWeight = e)
-    this.st.lineColor.subscribe(e => this.drawParm.lineColor = e)
-    this.st.bgColor.subscribe(e => this.changeBgColor(e))
+    this.st.color.subscribe(e => this.drawParm.color = e)
     this.st.bgImage.subscribe(e => this.changeBgImage(e))
-  }
-
-  private changeBgColor(c) {
-    this.drawParm.bgColor = c
-    this.ctx.fillStyle = this.drawParm.bgColor
-    this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
+    this.st.paintTool.subscribe(e => this.paintTools(e))
   }
 
   private changeBgImage(i) {
@@ -85,6 +99,19 @@ export class AreaComponent {
 
     image.onload = () => {
       this.ctx.drawImage(image, 0, 0, this.windowWidth, this.windowHeight)
+    }
+  }
+
+  private paintTools(t) {
+    this.drawParm.paintTool = t
+  
+    switch(t) {
+      case 'pencil':
+        this.drawParm.lineCap = 'round'
+        break
+      case 'brush':
+        this.drawParm.lineCap = 'butt'
+        break
     }
   }
 }

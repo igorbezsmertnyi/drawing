@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToolsLineColorComponent } from './tools-line-color.component';
+import { ToolsPaletteComponent } from './tools-palette.component';
 
-describe('ToolsLineColorComponent', () => {
-  let component: ToolsLineColorComponent;
-  let fixture: ComponentFixture<ToolsLineColorComponent>;
+describe('ToolsPaletteComponent', () => {
+  let component: ToolsPaletteComponent;
+  let fixture: ComponentFixture<ToolsPaletteComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToolsLineColorComponent ]
+      declarations: [ ToolsPaletteComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ToolsLineColorComponent);
+    fixture = TestBed.createComponent(ToolsPaletteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

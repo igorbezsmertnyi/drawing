@@ -42,8 +42,26 @@
       input
         display none
 
-  &--input
-    margin-top 4px
+    &--button
+      display flex
+      flex-flow row wrap
+
+  &__button
+    width 20px
+    height 20px
+    padding 4px
+    margin 4px
+    border 1px solid $chain-gang-grey
+    cursor pointer
+
+    &:nth-child(3n-8)
+      margin-left 0
+  
+    i
+      font-size 1.2em
+
+    &--selected
+      border 1px solid #fff
 
   p
     margin 0

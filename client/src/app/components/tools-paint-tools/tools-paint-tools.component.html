@@ -1,0 +1,40 @@
+<div class="tools-item">
+  <span class="tools-item__header">Paint Tools</span>
+  <div class="tools-item__action tools-item__action--button">
+    <div 
+      class="tools-item__button" 
+      [ngClass]="selectedTool == 'pencil' && 'tools-item__button--selected'"
+      matTooltip="pencil"
+      (click)="changeTool('pencil')"
+    >
+      <i class="material-icons">edit</i>
+    </div>
+
+    <div 
+      class="tools-item__button" 
+      [ngClass]="selectedTool == 'brush' && 'tools-item__button--selected'"
+      matTooltip="brush"
+      (click)="changeTool('brush')"
+    >
+      <i class="material-icons">brush</i>
+    </div>
+
+    <div 
+      class="tools-item__button" 
+      [ngClass]="selectedTool == 'eraser' && 'tools-item__button--selected'"
+      matTooltip="eraser"
+      (click)="changeTool('eraser')"
+    >
+      <i class="material-icons">crop_7_5</i>
+    </div>
+
+    <div 
+      class="tools-item__button" 
+      [ngClass]="selectedTool == 'color_fill' && 'tools-item__button--selected'"
+      matTooltip="fill color"
+      (click)="changeTool('color_fill')"
+    >
+      <i class="material-icons">format_color_fill</i>
+    </div>
+  </div>
+</div>
