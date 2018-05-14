@@ -2,7 +2,6 @@ import { Component, ViewChild, ElementRef, Renderer2 } from '@angular/core'
 import { MousePosition, initialMousePosition } from '../../models/MousePosition'
 import { DrawParam, initialDrawParam } from '../../models/DrawParam'
 import { BoundingRect } from '../../models/BoundingRect'
-
 import { StoreService } from '../../app.store.service'
 
 @Component({
@@ -53,12 +52,24 @@ export class AreaComponent {
 
   drawEnd() { this.proccessing = false }
 
+  clickFunctions() {
+    switch(this.drawParm.paintTool) {
+      case 'color_fill':
+        this.ctx.fillStyle = this.drawParm.color
+        this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
+        this.st.proccessingState(true)
+        break
+      case 'clear':
+        this.ctx.clearRect(0, 0, this.windowWidth, this.windowHeight)
+        break
+    }
+  }
+
   private drawing() {
     if (!this.proccessing) return
 
     this.ctx.lineWidth = this.drawParm.lineWeight
     this.ctx.strokeStyle = this.drawParm.color
-    this.ctx.fillStyle = this.drawParm.color
     this.ctx.lineCap = this.drawParm.lineCap
 
     switch(this.drawParm.paintTool) {
@@ -67,9 +78,6 @@ export class AreaComponent {
         break
       case 'brush':
         this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
-        break
-      case 'color_fill':
-        this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
         break
       case 'eraser':
         this.ctx.clearRect(

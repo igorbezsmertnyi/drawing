@@ -36,5 +36,14 @@
     >
       <i class="material-icons">format_color_fill</i>
     </div>
+
+    <div 
+      class="tools-item__button" 
+      [ngClass]="selectedTool == 'clear' && 'tools-item__button--selected'"
+      matTooltip="clear artboard"
+      (click)="changeTool('clear')"
+    >
+      <i class="material-icons">delete</i>
+    </div>
   </div>
 </div>

@@ -1,9 +1,40 @@
 <div 
-  class="cursor-label"
+  class="cursor"
+  [ngClass]="{
+    'cursor--pencil': (drawParm?.paintTool == 'pencil'),
+    'cursor--brush': (drawParm?.paintTool == 'brush'),
+    'cursor--eraser': (drawParm?.paintTool == 'eraser'),
+    'cursor--fill': (drawParm?.paintTool == 'color_fill'),
+    'cursor--clear': (drawParm?.paintTool == 'clear')
+  }"
+  [style.width]="drawParm?.lineWeight + 'px'"
+  [style.height]="drawParm?.lineWeight + 'px'"
+  [style.border-color]="invertedColor"
   [ngStyle]="{
-    'transform': 'translate('+ (mousePosition?.posX - 60) +'px, '+ (mousePosition?.posY + 10) +'px)'
+    'transform': 'translate('+ (mousePosition?.posX - (drawParm?.lineWeight / 2)) +'px, '+ (mousePosition?.posY - (drawParm?.lineWeight / 2)) +'px)'
   }"
 >
-  <p>x: {{ mousePosition?.posX }}</p>
-  <p>y: {{ mousePosition?.posY }}</p>
+  <i 
+    *ngIf="drawParm?.paintTool == 'pencil'" 
+    class="material-icons"
+    [style.color]="invertedColor"
+  >edit</i>
+
+  <i 
+    *ngIf="drawParm?.paintTool == 'brush'" 
+    class="material-icons"
+    [style.color]="invertedColor"
+  >brush</i>
+
+  <i 
+    *ngIf="drawParm?.paintTool == 'color_fill'" 
+    class="material-icons"
+    [style.color]="invertedColor"
+  >format_color_fill</i>
+
+  <i 
+    *ngIf="drawParm?.paintTool == 'clear'" 
+    class="material-icons"
+    [style.color]="invertedColor"
+  >delete</i>
 </div>

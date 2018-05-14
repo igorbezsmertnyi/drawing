@@ -1,15 +1,36 @@
 @import '~styles/variables.styl'
 
-.cursor-label
+// .cursor
+//   position absolute
+//   padding 8px
+//   background $white-smoke
+//   color #000
+//   border-radius 4px
+//   opacity .5
+//   z-index 3
+
+//   p
+//     margin 0
+//     font-size .8em
+//     white-space pre
+
+.cursor
   position absolute
-  padding 8px
-  background $white-smoke
-  color #000
-  border-radius 4px
-  opacity .5
+  border 1px solid #000
   z-index 3
 
-  p
-    margin 0
-    font-size .8em
-    white-space pre
+  &--pencil
+    border-radius 0
+
+  &--brush
+    border-radius 50%
+  
+  &--eraser
+    border-radius 0
+    background #fff
+
+  &--fill
+  &--clear
+    width 12px !important
+    height 12px !important
+    border 0

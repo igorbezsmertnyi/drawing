@@ -5,6 +5,13 @@ import { MousePosition } from './models/MousePosition'
 
 @Injectable()
 export class StoreService {
+  //proccessing
+  _proccessing = new Subject<boolean>()
+  proccessing = this._proccessing.asObservable()
+
+  proccessingState(data: boolean) {
+    this._proccessing.next(data)
+  }
 
   //for sharing mouse position between components
   _coordinates = new Subject<MousePosition>()
@@ -28,22 +35,6 @@ export class StoreService {
 
   changeColor(data: string) {
     this._color.next(data)
-  }
-
-  //for changing line color
-  _lineColor = new Subject<string>()
-  lineColor = this._lineColor.asObservable()
-
-  changeLineColor(data: string) {
-    this._lineColor.next(data)
-  }
-
-  //for changing background color
-  _bgColor = new Subject<string>()
-  bgColor = this._bgColor.asObservable()
-
-  changeBgColor(data: string) {
-    this._bgColor.next(data)
   }
 
   //for changing background image
