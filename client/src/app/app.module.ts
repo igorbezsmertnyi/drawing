@@ -4,6 +4,7 @@ import 'hammerjs'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core'
+import { HttpModule } from '@angular/http'
 
 //modules
 import { 
@@ -18,9 +19,11 @@ import {
 } from '@angular/material'
 
 import { ColorPickerModule } from 'ngx-color-picker'
+import { AppRoutingModule } from './app.routing.module'
 
 //services
 import { StoreService } from './app.store.service'
+import { WorkSpaceService } from './containers/work-space/work-space.service'
 
 //containers
 import { WorkSpaceComponent } from './containers/work-space/work-space.component'
@@ -52,6 +55,8 @@ import { ToolsPaletteComponent } from './components/tools-palette/tools-palette.
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpModule,
+    AppRoutingModule,    
     MatSelectModule,
     MatInputModule,
     FormsModule,
@@ -60,7 +65,8 @@ import { ToolsPaletteComponent } from './components/tools-palette/tools-palette.
     MatTooltipModule
   ],
   providers: [
-    StoreService
+    StoreService,
+    WorkSpaceService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,12 +1,21 @@
 package routes
 
 import (
+	"io/ioutil"
 	"net/http"
 
 	"drawing/api"
 
 	"github.com/gorilla/mux"
 )
+
+//js router
+func emptyHandler(w http.ResponseWriter, r *http.Request) {
+	f, _ := ioutil.ReadFile("./dist/index.html")
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(f)
+}
 
 // NewRoutes builds the routes for the api
 func NewRoutes() *mux.Router {
@@ -16,11 +25,14 @@ func NewRoutes() *mux.Router {
 	mux.Handle("/", http.FileServer(http.Dir("./dist/"))).Methods("GET")
 	mux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./dist/"))))
 
+	//js routes
+	mux.HandleFunc("/artboard/{slug}", emptyHandler).Methods("GET")
+
 	// api requst path
 	apiPath := mux.PathPrefix("/api/").Subrouter()
 
-	apiPath.HandleFunc("/create_artboard", api.HandlerCreateArboard).Methods("POST")
-	apiPath.HandleFunc("/get_artboard/{slug}", api.HandlerGetArboard).Methods("GET")
+	apiPath.HandleFunc("/artboard/create", api.HandlerCreateArboard).Methods("POST")
+	apiPath.HandleFunc("/artboard/{slug}", api.HandlerGetArboard).Methods("GET")
 
 	return mux
 }
