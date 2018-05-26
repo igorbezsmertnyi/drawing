@@ -33,6 +33,7 @@ func NewRoutes() *mux.Router {
 
 	apiPath.HandleFunc("/artboard/create", api.HandlerCreateArboard).Methods("POST")
 	apiPath.HandleFunc("/artboard/{slug}", api.HandlerGetArboard).Methods("GET")
+	apiPath.HandleFunc("/artboard/{slug}", api.HandlerUpdateArboard).Methods("PATCH")
 
 	return mux
 }

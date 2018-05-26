@@ -9,8 +9,9 @@ import (
 
 	"drawing/models"
 	"drawing/routes"
+	"drawing/services"
+	"drawing/utils"
 
-	"github.com/rs/cors"
 	"github.com/urfave/negroni"
 )
 
@@ -23,13 +24,7 @@ func determineListenAddress() (string, error) {
 }
 
 func connectDatabase() {
-	url := os.Getenv("DATABASE_URL")
-
-	if url == "" {
-		url = "user=postgres dbname=postgres sslmode=disable"
-	}
-
-	db, err := models.Connect(url)
+	db, err := models.Connect()
 
 	if err != nil {
 		log.Fatalf("Connection error: %s", err.Error())
@@ -38,17 +33,24 @@ func connectDatabase() {
 	models.SetDatabase(db)
 }
 
+func awsSession() {
+	sess, err := services.AWSSession()
+
+	if err != nil {
+		log.Fatalf("Connection error: %s", err.Error())
+	}
+
+	services.AWS(sess)
+}
+
 func main() {
 	connectDatabase()
-
-	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-	})
+	awsSession()
 
 	addr, _ := determineListenAddress()
 	routes := routes.NewRoutes()
 	n := negroni.Classic()
-	n.Use(c)
+	n.Use(utils.AllowCors())
 	n.UseHandler(routes)
 
 	s := &http.Server{

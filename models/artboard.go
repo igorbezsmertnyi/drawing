@@ -3,19 +3,21 @@ package models
 import (
 	"database/sql"
 	"drawing/utils"
+	"log"
 	"time"
 )
 
-// Artboard row structure
+//Artboard row structure
 type Artboard struct {
 	Id        int64     `json:"id"`
 	Slug      string    `json:"slug"`
+	Image     string    `json:"image"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
-// Create Artboard Action
+//CreateArtboard Artboard Action
 func CreateArtboard(db *sql.DB) (*Artboard, error) {
-	created := Artboard{}
+	artboard := Artboard{}
 	slug := utils.RandStringBytes(4)
 	createdAt := time.Now()
 
@@ -27,14 +29,15 @@ func CreateArtboard(db *sql.DB) (*Artboard, error) {
 
 	row.Next()
 
-	if err := row.Scan(&created.Id, &created.Slug, &created.CreatedAt); err != nil {
+	if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
+		log.Fatal("sql error: %s", err.Error())
 		return nil, err
 	}
 
-	return &created, nil
+	return &artboard, nil
 }
 
-// Slect Artboard Action
+//SelectArtboard Artboard Action
 func SelectArtboard(db *sql.DB, slug string) (*Artboard, error) {
 	artboard := Artboard{}
 
@@ -45,7 +48,28 @@ func SelectArtboard(db *sql.DB, slug string) (*Artboard, error) {
 
 	row.Next()
 
-	if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.CreatedAt); err != nil {
+	if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
+		log.Fatal("sql error: %s", err.Error())
+		return nil, err
+	}
+
+	return &artboard, nil
+}
+
+//UpdateArtboard for updating rows
+func UpdateArtboard(db *sql.DB, slug string, image string) (*Artboard, error) {
+	artboard := Artboard{}
+
+	row, _ := db.Query(
+		"UPDATE artboard SET image=$1 WHERE slug LIKE $2 RETURNING *;",
+		image,
+		slug,
+	)
+
+	row.Next()
+
+	if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
+		log.Fatal("sql error: %s", err.Error())
 		return nil, err
 	}
 
