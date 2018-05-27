@@ -15,12 +15,18 @@ export class WorkSpaceService {
   }
 
   getArtBoard<Subject>(id) {
-    return this.http.get(Routes.getArtboardPath(id), this.headers)
+    return this.http.get(Routes.artboardPath(id), this.headers)
       .map((res: Response) => res.json())
   }
 
   createArtBoard<Subject>() {
     return this.http.post(Routes.createArtboardPath(), null, this.headers)
+      .map((res: Response) => res.json())
+  }
+
+  updateArtBoard<Subject>(id, data) {
+    const body = JSON.stringify({ image: data })
+    return this.http.patch(Routes.artboardPath(id), body, this.headers)
       .map((res: Response) => res.json())
   }
 }

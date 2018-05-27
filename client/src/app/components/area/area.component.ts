@@ -34,6 +34,9 @@ export class AreaComponent {
 
     this.canvasPostion = this.canvas.nativeElement.getBoundingClientRect()
 
+    this.ctx.fillStyle = '#ffffff'
+    this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
+
     this.updateParms()
   }
 
@@ -50,23 +53,32 @@ export class AreaComponent {
     this.ctx.beginPath()
   }
 
-  drawEnd() { this.proccessing = false }
+  drawEnd() { 
+    this.proccessing = false 
+    this.st.proccessingState(false)
+    this.st.changeBackground(false)
+  }
 
   clickFunctions() {
     switch(this.drawParm.paintTool) {
       case 'color_fill':
+        this.drawParm.bgColor = this.drawParm.color
         this.ctx.fillStyle = this.drawParm.color
         this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
-        this.st.proccessingState(true)
+        this.st.changeBackground(true)
         break
       case 'clear':
-        this.ctx.clearRect(0, 0, this.windowWidth, this.windowHeight)
+        this.ctx.fillStyle = '#ffffff'
+        this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
         break
     }
+
+    this.st.proccessingState(false)
   }
 
   private drawing() {
     if (!this.proccessing) return
+    this.st.proccessingState(true)
 
     this.ctx.lineWidth = this.drawParm.lineWeight
     this.ctx.strokeStyle = this.drawParm.color
@@ -80,12 +92,8 @@ export class AreaComponent {
         this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
         break
       case 'eraser':
-        this.ctx.clearRect(
-          this.mousePosition.posX - (this.drawParm.lineWeight / 2), 
-          this.mousePosition.posY - (this.drawParm.lineWeight / 2),
-          this.drawParm.lineWeight, 
-          this.drawParm.lineWeight
-        )
+        this.ctx.strokeStyle = '#ffffff'
+        this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
         break
     }
   
@@ -107,6 +115,7 @@ export class AreaComponent {
 
     image.onload = () => {
       this.ctx.drawImage(image, 0, 0, this.windowWidth, this.windowHeight)
+      this.st.proccessingState(false)
     }
   }
 

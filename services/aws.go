@@ -1,9 +1,10 @@
 package services
 
 import (
+	"bytes"
 	"drawing/utils"
+	"encoding/base64"
 	"log"
-	"mime/multipart"
 	"os"
 	"path/filepath"
 
@@ -38,13 +39,15 @@ func AWSSession() (*s3manager.Uploader, error) {
 }
 
 //Upload for divide envirement
-func Upload(slug string, file multipart.File, handle *multipart.FileHeader) (string, error) {
+func Upload(slug string, dataURL string) (string, error) {
 	if os.Getenv("GO_ENV") == "production" {
+		buff, _ := base64.StdEncoding.DecodeString(dataURL)
 		res, err := Uploader.Upload(&s3manager.UploadInput{
-			Bucket: aws.String(os.Getenv("S3_BUCKET")),
-			Key:    aws.String(filepath.Base(slug + ".jpg")),
-			ACL:    aws.String("public-read"),
-			Body:   file,
+			Bucket:      aws.String(os.Getenv("S3_BUCKET")),
+			Key:         aws.String(filepath.Base(slug + ".jpg")),
+			ACL:         aws.String("public-read"),
+			ContentType: aws.String("image/png"),
+			Body:        bytes.NewReader(buff),
 		})
 
 		if err != nil {
@@ -53,7 +56,7 @@ func Upload(slug string, file multipart.File, handle *multipart.FileHeader) (str
 
 		return res.Location, nil
 	} else {
-		res, err := utils.SaveFile(file, handle)
+		res, err := utils.SaveFile(dataURL, slug)
 
 		if err != nil {
 			return "", err

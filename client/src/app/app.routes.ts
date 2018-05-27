@@ -3,7 +3,7 @@ import { environment } from '../environments/environment'
 const urlBase = environment.production ? '' : 'http://localhost:3000'
 
 export const Routes = {
-  getArtboardPath: slug => (
+  artboardPath: slug => (
     `${urlBase}/api/artboard/${slug}`
   ),
   createArtboardPath: () => (

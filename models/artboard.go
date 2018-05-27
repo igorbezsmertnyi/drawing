@@ -27,11 +27,11 @@ func CreateArtboard(db *sql.DB) (*Artboard, error) {
 		createdAt,
 	)
 
-	row.Next()
-
-	if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
-		log.Fatal("sql error: %s", err.Error())
-		return nil, err
+	for row.Next() {
+		if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
+			log.Fatal("sql error: %s", err.Error())
+			return nil, err
+		}
 	}
 
 	return &artboard, nil
@@ -46,11 +46,11 @@ func SelectArtboard(db *sql.DB, slug string) (*Artboard, error) {
 		slug,
 	)
 
-	row.Next()
-
-	if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
-		log.Fatal("sql error: %s", err.Error())
-		return nil, err
+	for row.Next() {
+		if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
+			log.Fatal("sql error: %s", err.Error())
+			return nil, err
+		}
 	}
 
 	return &artboard, nil
@@ -66,11 +66,11 @@ func UpdateArtboard(db *sql.DB, slug string, image string) (*Artboard, error) {
 		slug,
 	)
 
-	row.Next()
-
-	if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
-		log.Fatal("sql error: %s", err.Error())
-		return nil, err
+	for row.Next() {
+		if err := row.Scan(&artboard.Id, &artboard.Slug, &artboard.Image, &artboard.CreatedAt); err != nil {
+			log.Fatal("sql error: %s", err.Error())
+			return nil, err
+		}
 	}
 
 	return &artboard, nil

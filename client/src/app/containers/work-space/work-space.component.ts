@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { MousePosition } from '../../models/MousePosition'
 import { WorkSpaceService } from './work-space.service'
+import { StoreService } from '../../app.store.service'
 
 @Component({
   selector: 'work-space',
@@ -10,21 +11,26 @@ import { WorkSpaceService } from './work-space.service'
 })
 
 export class WorkSpaceComponent {
-  constructor(private activatedRoute: ActivatedRoute, 
-              private workSpace: WorkSpaceService,
-              private router: Router) { }
+  slugId: string = ''
 
-  ngOnInit() {
+  constructor(private activatedRoute: ActivatedRoute, private workSpace: WorkSpaceService, private st: StoreService, private router: Router) {
     this.activatedRoute.params.subscribe((params: Params) => {
       if (params.id) {
-        this.workSpace.getArtBoard(params.id).subscribe(res => {
-          console.log(res)
-        })
+        this.st.proccessing.subscribe(e => { !e && this.uploadImage() })
+        this.workSpace.getArtBoard(params.id).subscribe(res => { this.slugId = res.slug })
       } else {
         this.workSpace.createArtBoard().subscribe(res => {
           this.router.navigate(['artboard', res.slug])
+          this.slugId = res.slug
         })
       }
     })
+  }
+
+  private uploadImage() {
+    const artBoard = <HTMLCanvasElement>document.getElementById('artBoard')
+    const dataURL = artBoard.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "")
+
+    this.workSpace.updateArtBoard(this.slugId, dataURL).subscribe(res => res)
   }
 }

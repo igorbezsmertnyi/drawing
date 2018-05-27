@@ -4,12 +4,17 @@ import (
 	"database/sql"
 	"drawing/models"
 	"drawing/services"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
 var db *sql.DB
+
+type Image struct {
+	Image string `json:"image"`
+}
 
 //HandlerCreateArboard for creating new artborad
 func HandlerCreateArboard(w http.ResponseWriter, r *http.Request) {
@@ -42,28 +47,30 @@ func HandlerGetArboard(w http.ResponseWriter, r *http.Request) {
 //HandlerUpdateArboard for updating artborad
 func HandlerUpdateArboard(w http.ResponseWriter, r *http.Request) {
 	db := models.DB
+	i := Image{}
 	slug := mux.Vars(r)["slug"]
-	image, handle, err := r.FormFile("image")
+	json.NewDecoder(r.Body).Decode(&i)
+	res, err := services.Upload(slug, i.Image)
 
 	if err != nil {
 		errorResponse(r, w, err)
 		return
 	}
 
-	defer image.Close()
-
-	res, err := services.Upload(slug, image, handle)
+	artborad, err := models.SelectArtboard(db, slug)
 
 	if err != nil {
 		errorResponse(r, w, err)
 		return
 	}
 
-	artborad, err := models.UpdateArtboard(db, slug, res)
+	if artborad.Image == "" {
+		artborad, err = models.UpdateArtboard(db, slug, res)
 
-	if err != nil {
-		errorResponse(r, w, err)
-		return
+		if err != nil {
+			errorResponse(r, w, err)
+			return
+		}
 	}
 
 	respond(r, w, http.StatusOK, artborad)

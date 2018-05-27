@@ -1,11 +1,12 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/md5"
+	"encoding/base64"
 	"encoding/hex"
-	"io/ioutil"
+	"image/png"
 	"math/rand"
-	"mime/multipart"
 	"os"
 	"time"
 
@@ -29,23 +30,31 @@ func RandStringBytes(n int) string {
 }
 
 //SaveFile method for save file
-func SaveFile(file multipart.File, handle *multipart.FileHeader) (string, error) {
+func SaveFile(dataURL string, slug string) (string, error) {
 	if _, err := os.Stat("./dist/tmp/"); os.IsNotExist(err) {
 		os.MkdirAll("./dist/tmp/", os.ModePerm)
 	}
 
-	data, err := ioutil.ReadAll(file)
+	fileURL := "./dist/tmp/" + slug + ".png"
+	filePath := "/static/tmp/" + slug + ".png"
+	unbased, err := base64.StdEncoding.DecodeString(dataURL)
 	if err != nil {
 		return "", err
 	}
 
-	fileURL := "./dist/tmp/" + handle.Filename
-	filePath := "/static/tmp/" + handle.Filename
-
-	err = ioutil.WriteFile(fileURL, data, 0666)
+	image, err := png.Decode(bytes.NewReader(unbased))
 	if err != nil {
 		return "", err
 	}
+
+	f, err := os.Create(fileURL)
+	if err != nil {
+		return "", err
+	}
+
+	defer f.Close()
+
+	png.Encode(f, image)
 
 	return filePath, nil
 }

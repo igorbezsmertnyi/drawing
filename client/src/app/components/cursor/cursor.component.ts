@@ -22,7 +22,7 @@ export class CursorComponent {
     this.st.lineWeight.subscribe(e => this.drawParm.lineWeight = e)
     this.st.paintTool.subscribe(e => this.drawParm.paintTool = e)
     this.st.color.subscribe(e => this.hex = e)
-    this.st.proccessing.subscribe(e => e && this.invertColor())
+    this.st.backgroundColor.subscribe(e => e && this.invertColor())
   }
 
   private invertColor() {

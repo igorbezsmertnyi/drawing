@@ -13,6 +13,14 @@ export class StoreService {
     this._proccessing.next(data)
   }
 
+  //change background color
+  _backgroundColor = new Subject<boolean>()
+  backgroundColor = this._backgroundColor.asObservable()
+
+  changeBackground(data: boolean) {
+    this._backgroundColor.next(data)
+  }
+
   //for sharing mouse position between components
   _coordinates = new Subject<MousePosition>()
   coordinates = this._coordinates.asObservable()
