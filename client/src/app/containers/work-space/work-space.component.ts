@@ -17,7 +17,10 @@ export class WorkSpaceComponent {
     this.activatedRoute.params.subscribe((params: Params) => {
       if (params.id) {
         this.st.proccessing.subscribe(e => { !e && this.uploadImage() })
-        this.workSpace.getArtBoard(params.id).subscribe(res => { this.slugId = res.slug })
+        this.workSpace.getArtBoard(params.id).subscribe(res => { 
+          if (res.image != '') this.st.changeBgImage(res.image)
+          this.slugId = res.slug
+        })
       } else {
         this.workSpace.createArtBoard().subscribe(res => {
           this.router.navigate(['artboard', res.slug])
