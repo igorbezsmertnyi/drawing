@@ -12,5 +12,18 @@ export class ToolsLineWeightComponent {
 
   constructor(private st: StoreService) { }
 
+  ngOnInit() { this.arrowCntrol() }
   changeLineWeight() { this.st.changeLineWeight(this.selectedWeight) }
+
+  private arrowCntrol() {
+    window.addEventListener('keydown', e => {
+      if (e.code == 'ArrowDown') {
+        if (this.selectedWeight > 1) this.selectedWeight = this.selectedWeight - 1
+      } else if (e.code == 'ArrowUp') {
+        this.selectedWeight = this.selectedWeight + 1
+      }
+
+      this.st.changeLineWeight(this.selectedWeight)
+    })
+  }
 }
