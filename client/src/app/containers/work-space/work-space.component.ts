@@ -32,6 +32,7 @@ export class WorkSpaceComponent {
 
   private uploadImage() {
     const artBoard = <HTMLCanvasElement>document.getElementById('artBoard')
+    if (!artBoard) return
     const dataURL = artBoard.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "")
 
     this.workSpace.updateArtBoard(this.slugId, dataURL).subscribe(res => res)

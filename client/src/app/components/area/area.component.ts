@@ -110,7 +110,8 @@ export class AreaComponent {
   private changeBgImage(i) {
     this.drawParm.bgImage = i
 
-    const image = new Image()
+    const image = new Image
+    image.crossOrigin = 'anonymous'
     image.src = this.drawParm.bgImage
 
     image.onload = () => {
