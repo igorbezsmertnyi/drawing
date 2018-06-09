@@ -28,10 +28,10 @@ import { WorkSpaceP2PService } from './containers/work-space/work-space.peer-to-
 
 //containers
 import { WorkSpaceComponent } from './containers/work-space/work-space.component'
+import { AreaComponent } from './containers/area/area.component'
 
 //components
 import { AppComponent } from './components/app/app.component'
-import { AreaComponent } from './components//area/area.component'
 import { CursorComponent } from './components/cursor/cursor.component'
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component'
 import { ToolsCoordinatesComponent } from './components/tools-coordinates/tools-coordinates.component'

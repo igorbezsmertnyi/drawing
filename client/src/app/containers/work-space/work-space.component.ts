@@ -22,8 +22,6 @@ export class WorkSpaceComponent {
         this.workSpace.getArtBoard(params.id).subscribe(res => { 
           if (res.image != '') this.st.changeBgImage(res.image)
           this.connectToHub()
-
-          this.p2p.connections.subscribe(e => console.log(e))
         })
       } else {
         this.workSpace.createArtBoard().subscribe(res => { this.router.navigate(['artboard', res.slug]) })
