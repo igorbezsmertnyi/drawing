@@ -24,6 +24,7 @@ import { AppRoutingModule } from './app.routing.module'
 //services
 import { StoreService } from './app.store.service'
 import { WorkSpaceService } from './containers/work-space/work-space.service'
+import { WorkSpaceP2PService } from './containers/work-space/work-space.peer-to-peer.service'
 
 //containers
 import { WorkSpaceComponent } from './containers/work-space/work-space.component'
@@ -66,7 +67,8 @@ import { ToolsPaletteComponent } from './components/tools-palette/tools-palette.
   ],
   providers: [
     StoreService,
-    WorkSpaceService
+    WorkSpaceService,
+    WorkSpaceP2PService
   ],
   bootstrap: [AppComponent]
 })

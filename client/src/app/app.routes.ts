@@ -11,6 +11,6 @@ export const Routes = {
     `${urlBase}/api/artboard/create`
   ),
   artboardHubPath: slug => (
-    `${wsProtocol}/${window.location.hostname}/api/artboard/hub/${slug}`
+    `${wsProtocol}/${window.location.host}/api/artboard/hub/${slug}`
   )
 }
