@@ -34,10 +34,6 @@ export class WorkSpaceComponent {
     })
   }
 
-  sendMessage(conn) {
-    conn.send(`Test connection message from user: ${this.currentId}`)
-  }
-
   private uploadImage() {
     const artBoard = <HTMLCanvasElement>document.getElementById('artBoard')
     if (!artBoard) return
