@@ -15,7 +15,7 @@ export class WorkSpaceP2PService {
   constructor(private workSpace: WorkSpaceService) { }
 
   //for update connections array
-  _connections = new Subject<boolean>()
+  _connections = new Subject<any>()
   connections = this._connections.asObservable()
 
   connectionArr(data: any) {

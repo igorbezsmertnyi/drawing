@@ -3,6 +3,7 @@ import { MousePosition, initialMousePosition } from '../../models/MousePosition'
 import { DrawParam, initialDrawParam } from '../../models/DrawParam'
 import { BoundingRect } from '../../models/BoundingRect'
 import { StoreService } from '../../app.store.service'
+import { WorkSpaceP2PService } from '../../containers/work-space/work-space.peer-to-peer.service'
 
 @Component({
   selector: 'app-area',
@@ -18,12 +19,16 @@ export class AreaComponent {
   drawParm: DrawParam = initialDrawParam
   windowWidth: string
   windowHeight: string
+  connections: Array<any> = []
+  currentId: string
 
   @ViewChild('canv') canvas: ElementRef
 
-  constructor(private renderer: Renderer2, private el: ElementRef, private st: StoreService) {
+  constructor(private renderer: Renderer2, private el: ElementRef, private st: StoreService,
+              private p2p: WorkSpaceP2PService) {
     this.windowWidth = (window.innerWidth - 168).toString()
     this.windowHeight = window.innerHeight.toString()
+    this.currentId = this.p2p.currentId
   }
 
   ngOnInit() {
@@ -38,13 +43,15 @@ export class AreaComponent {
     this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
 
     this.updateParms()
+
+    this.p2p.connections.subscribe(e => { this.connections = e })
   }
 
   coordinates(e) {
     this.mousePosition.posX = e.clientX - this.canvasPostion.left
     this.mousePosition.posY = e.clientY - this.canvasPostion.top
     this.st.mouseCoordinate(this.mousePosition)
-
+    this.sendCursorData()
     this.drawing()
   }
 
@@ -130,5 +137,16 @@ export class AreaComponent {
         this.drawParm.lineCap = 'butt'
         break
     }
+  }
+
+  private sendCursorData() {
+    this.connections.forEach(conn => { 
+      if (conn !== null) {
+        conn.send(JSON.stringify({
+          id: conn._id,
+          positions: this.mousePosition,
+        }))
+      }
+    })
   }
 }
