@@ -1,6 +1,7 @@
 import { environment } from '../environments/environment'
 
-const urlBase = environment.production ? '' : 'http://localhost:3000'
+const urlBase = environment.production ? '' : '//localhost:3000'
+const wsProtocol = window.location.protocol == 'https:' ? 'wss:' : 'ws:'
 
 export const Routes = {
   artboardPath: slug => (
@@ -8,5 +9,8 @@ export const Routes = {
   ),
   createArtboardPath: () => (
     `${urlBase}/api/artboard/create`
+  ),
+  artboardHubPath: slug => (
+    `${wsProtocol}/${window.location.hostname}/api/artboard/hub/${slug}`
   )
 }

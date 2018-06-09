@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"drawing/api"
+	"drawing/api/ws"
 
 	"github.com/gorilla/mux"
 )
@@ -34,6 +35,7 @@ func NewRoutes() *mux.Router {
 	apiPath.HandleFunc("/artboard/create", api.HandlerCreateArboard).Methods("POST")
 	apiPath.HandleFunc("/artboard/{slug}", api.HandlerGetArboard).Methods("GET")
 	apiPath.HandleFunc("/artboard/{slug}", api.HandlerUpdateArboard).Methods("PATCH")
+	apiPath.HandleFunc("/artboard/hub/{slug}", ws.Handler).Methods("GET")
 
 	return mux
 }

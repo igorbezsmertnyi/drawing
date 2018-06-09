@@ -55,7 +55,6 @@ export class AreaComponent {
 
   drawEnd() { 
     this.proccessing = false 
-    this.st.proccessingState(false)
     this.st.changeBackground(false)
   }
 

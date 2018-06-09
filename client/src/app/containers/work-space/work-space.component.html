@@ -1,4 +1,8 @@
 <div class="work-space">
+  <div class="work-space__test-p2p">
+    <button *ngFor="let conn of localConnections" (click)="sendMessage(conn)">Send Message to {{ conn._id }}</button>
+  </div>
+
   <div class="work-space__area">
     <app-area></app-area>
     <app-cursor></app-cursor>

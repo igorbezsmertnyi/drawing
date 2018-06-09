@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"drawing/api/ws"
 	"drawing/models"
 	"drawing/routes"
 	"drawing/services"
@@ -43,9 +44,16 @@ func awsSession() {
 	services.AWS(sess)
 }
 
+func websoketHub() {
+	hub := ws.H
+
+	go hub.Run()
+}
+
 func main() {
 	connectDatabase()
 	awsSession()
+	websoketHub()
 
 	addr, _ := determineListenAddress()
 	routes := routes.NewRoutes()
