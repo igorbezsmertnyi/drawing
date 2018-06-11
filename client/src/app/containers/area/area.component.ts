@@ -4,6 +4,8 @@ import { DrawParam, initialDrawParam } from '../../models/DrawParam'
 import { BoundingRect } from '../../models/BoundingRect'
 import { StoreService } from '../../app.store.service'
 import { WorkSpaceP2PService } from '../../containers/work-space/work-space.peer-to-peer.service'
+import DrawFunction from '../../helper/drawFunction'
+import ClickFunction from '../../helper/clickFunction'
 
 @Component({
   selector: 'app-area',
@@ -13,14 +15,14 @@ import { WorkSpaceP2PService } from '../../containers/work-space/work-space.peer
 
 export class AreaComponent {
   proccessing: boolean = false
+  proccessingSt: boolean = false
   ctx: any = null
   canvasPostion: BoundingRect
   mousePosition: MousePosition = initialMousePosition
-  drawParm: DrawParam = initialDrawParam
+  drawParam: DrawParam = initialDrawParam
   windowWidth: string
   windowHeight: string
   connections: Array<any> = []
-  currentId: string
 
   @ViewChild('canv') canvas: ElementRef
 
@@ -28,7 +30,15 @@ export class AreaComponent {
               private p2p: WorkSpaceP2PService) {
     this.windowWidth = (window.innerWidth - 168).toString()
     this.windowHeight = window.innerHeight.toString()
-    this.currentId = this.p2p.currentId
+
+    this.st.proccessing.subscribe(e => { 
+      this.proccessingSt = e 
+      console.log(e)
+    })
+    this.p2p.connections.subscribe(e => { 
+      this.connections = e 
+      this.getCursorData()
+    })
   }
 
   ngOnInit() {
@@ -43,8 +53,6 @@ export class AreaComponent {
     this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
 
     this.updateParms()
-
-    this.p2p.connections.subscribe(e => { this.connections = e })
   }
 
   coordinates(e) {
@@ -66,19 +74,14 @@ export class AreaComponent {
   }
 
   clickFunctions() {
-    switch(this.drawParm.paintTool) {
-      case 'color_fill':
-        this.drawParm.bgColor = this.drawParm.color
-        this.ctx.fillStyle = this.drawParm.color
-        this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
-        this.st.changeBackground(true)
-        break
-      case 'clear':
-        this.ctx.fillStyle = '#ffffff'
-        this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
-        break
+    if (this.drawParam.paintTool == 'color_fill') {
+      this.drawParam.bgColor = this.drawParam.color
+      this.st.changeBackground(true)
     }
 
+    ClickFunction(this.ctx, this.drawParam, this.windowWidth, this.windowHeight)
+
+    this.sendCursorData()
     this.st.proccessingState(false)
   }
 
@@ -86,39 +89,22 @@ export class AreaComponent {
     if (!this.proccessing) return
     this.st.proccessingState(true)
 
-    this.ctx.lineWidth = this.drawParm.lineWeight
-    this.ctx.strokeStyle = this.drawParm.color
-    this.ctx.lineCap = this.drawParm.lineCap
-
-    switch(this.drawParm.paintTool) {
-      case 'pencil':
-        this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
-        break
-      case 'brush':
-        this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
-        break
-      case 'eraser':
-        this.ctx.strokeStyle = '#ffffff'
-        this.ctx.lineTo(this.mousePosition.posX, this.mousePosition.posY)
-        break
-    }
-  
-    this.ctx.stroke()
+    DrawFunction(this.ctx, this.drawParam, this.mousePosition)
   }
 
   private updateParms() {
-    this.st.lineWeight.subscribe(e => this.drawParm.lineWeight = e)
-    this.st.color.subscribe(e => this.drawParm.color = e)
+    this.st.lineWeight.subscribe(e => this.drawParam.lineWeight = e)
+    this.st.color.subscribe(e => this.drawParam.color = e)
     this.st.bgImage.subscribe(e => this.changeBgImage(e))
     this.st.paintTool.subscribe(e => this.paintTools(e))
   }
 
   private changeBgImage(i) {
-    this.drawParm.bgImage = i
+    this.drawParam.bgImage = i
 
     const image = new Image
     image.crossOrigin = 'anonymous'
-    image.src = this.drawParm.bgImage
+    image.src = this.drawParam.bgImage
 
     image.onload = () => {
       this.ctx.drawImage(image, 0, 0, this.windowWidth, this.windowHeight)
@@ -127,14 +113,14 @@ export class AreaComponent {
   }
 
   private paintTools(t) {
-    this.drawParm.paintTool = t
+    this.drawParam.paintTool = t
   
     switch(t) {
       case 'pencil':
-        this.drawParm.lineCap = 'round'
+        this.drawParam.lineCap = 'round'
         break
       case 'brush':
-        this.drawParm.lineCap = 'butt'
+        this.drawParam.lineCap = 'butt'
         break
     }
   }
@@ -145,8 +131,26 @@ export class AreaComponent {
         conn.send(JSON.stringify({
           id: conn._id,
           positions: this.mousePosition,
+          proccessing: this.proccessing,
+          drawParam: this.drawParam,
+          clicked: this.proccessingSt
         }))
       }
+    })
+  }
+
+  private getCursorData() {
+    this.connections.forEach(conn => {
+      conn.on('data', e => { 
+        const data = JSON.parse(e)
+
+        console.log(data.clicked)
+        if (!data.proccessing) this.ctx.beginPath()
+        if (data.proccessing) DrawFunction(this.ctx, data.drawParam, data.positions)
+        if (data.clicked && data.drawParam.paintTool == 'color_fill') {
+          ClickFunction(this.ctx, data.drawParam, this.windowWidth, this.windowHeight)
+        }
+      })
     })
   }
 }
