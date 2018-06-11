@@ -141,7 +141,7 @@ export class AreaComponent {
 
   private sendCursorData() {
     this.connections.forEach(conn => { 
-      if (conn !== null) {
+      if (conn && conn.connected) {
         conn.send(JSON.stringify({
           id: conn._id,
           positions: this.mousePosition,
