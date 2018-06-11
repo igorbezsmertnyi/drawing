@@ -22,6 +22,13 @@ export class WorkSpaceP2PService {
     this._connections.next(data)
   }
 
+  _disconnected = new Subject<any>()
+  disconnected = this._disconnected.asObservable()
+
+  disconnectedUser(data: any) {
+    this._disconnected.next(data)
+  }
+
   //messageController used for switching in a dependence of received commands
   public messageController(data) {
     const res = JSON.parse(data.data)
@@ -43,18 +50,18 @@ export class WorkSpaceP2PService {
 
   private onClose(pc) {
     console.log(`peer connection ${pc._id} are closed`)
+    this.disconnectedUser(pc._id)
     this.removePeerConnecton(pc._id)
-    this.connectionArr(this.localConnections)
   }
 
   private onError(pc, err) {
-    console.error(err)
+    console.warn(err)
+    this.disconnectedUser(pc._id)
     this.removePeerConnecton(pc._id)
-    this.connectionArr(this.localConnections)
   }
 
   //createPeer used for creating new Peer. isLocal state used for offer command
-  private createPeer(isLocal = true) {
+  private createPeer(isLocal: boolean = true) {
     const pc = new Peer({ initiator: isLocal, trickle: false })
 
     pc.on('close', () => { this.onClose(pc) })
@@ -74,7 +81,7 @@ export class WorkSpaceP2PService {
   }
 
   //connectPeer used for connection to the remote peer and send answer command via channel
-  private async connectPeer(data, conn) {
+  private async connectPeer(data: Message, conn) {
     conn.signal(data.offer)
     conn.on('signal', () => { this.sendAnswerCommand(conn._pc, data.peerId) })
   }
@@ -86,13 +93,13 @@ export class WorkSpaceP2PService {
   }
 
   //sendOfferCommand used for sending offer command to the channel for getting answer commands from the other users
-  private async sendOfferCommand(pc, peerId) {
+  private async sendOfferCommand(pc, peerId: string) {
     this.message = await WsMessage('OFFER', this.message, pc, peerId)
     await this.workSpace.send(this.message)
   }
 
   //sendAnswerCommand used for sending answer command to the channel to completing the connection between two peers
-  private async sendAnswerCommand(pc, peerId) {
+  private async sendAnswerCommand(pc, peerId: string) {
     this.message = await WsMessage('ANSWER', this.message, pc, peerId)
     await this.workSpace.send(this.message)
   }
@@ -105,7 +112,7 @@ export class WorkSpaceP2PService {
 
   //offerCommand used in messageController when the 'offer command' was received and run createPeer 
   //for generating an answer and receive an answer to the remote peer
-  private async offerCommand(data) {
+  private async offerCommand(data: Message) {
     const conn = await this.createPeer(false)
     if (conn._pc) {
       await this.connectPeer(data, conn)
@@ -114,7 +121,7 @@ export class WorkSpaceP2PService {
   }
 
   //answearCommand used in messageController when the 'answer command' was received and run connecting to the remote peer
-  private async answearCommand(data) {
+  private async answearCommand(data: Message) {
     const conn = await this.findPeer(data)
     if (conn) {
       await conn.signal(data.answer)
@@ -123,20 +130,21 @@ export class WorkSpaceP2PService {
   }
 
   //findPeer returnig connection from localConnections array finding by connId
-  private findPeer(data) {
-    return this.localConnections.find(conn => conn._pc && (conn._id == data.peerId))
+  private findPeer(message: Message) {
+    return this.localConnections.find(conn => conn._pc && (conn._id == message.peerId))
   }
 
   //setConnectedIds set userId to the list for ignoring them commands after they will connecting
-  private setConnectedIds(id) {
+  private setConnectedIds(id: string) {
     if (this.connectionIds.indexOf(id) == -1) {
       this.connectionIds.push(id)
     }
   }
 
   //removePeerConnecton used for removing cloused connection from localConnections array
-  private removePeerConnecton(id) {
-    const index = this.localConnections.indexOf(id)
+  private removePeerConnecton(id: string) {
+    const index = this.localConnections.map(c => c._id).indexOf(id)
+
     if (index == -1) return
     this.localConnections.splice(index, 1)
   }

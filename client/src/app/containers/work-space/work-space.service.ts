@@ -16,7 +16,7 @@ export class WorkSpaceService {
     this.headers = new RequestOptions({ headers: this.headers })
   }
 
-  public getArtBoard<Subject>(id) {
+  public getArtBoard<Subject>(id: string) {
     return this.http.get(Routes.artboardPath(id), this.headers)
       .map((res: Response) => res.json())
   }
@@ -26,13 +26,13 @@ export class WorkSpaceService {
       .map((res: Response) => res.json())
   }
 
-  public updateArtBoard<Subject>(id, data) {
+  public updateArtBoard<Subject>(id: string, data) {
     const body = JSON.stringify({ image: data })
     return this.http.patch(Routes.artboardPath(id), body, this.headers)
       .map((res: Response) => res.json())
   }
  
-  public connect<Subject>(id) {
+  public connect<Subject>(id: string) {
     if (!this.socket) this.socket = new WebSocket(Routes.artboardHubPath(id))
 
     return this.socket

@@ -1,11 +1,12 @@
 import { idGenerator } from '../../libs/idGenerator'
+import { SpdOffer, SpdAnswer } from './Spd'
 
 export interface Message {
   id: string
   peerId: string
   command: string
-  offer: any
-  answer: any
+  offer: SpdOffer
+  answer: SpdAnswer
 }
 
 export const initialMessage = {
