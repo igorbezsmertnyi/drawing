@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UsersCursorComponent } from './users-cursor.component';
+import { RemoteArtboardsComponent } from './remote-artboards.component';
 
-describe('UsersCursorComponent', () => {
-  let component: UsersCursorComponent;
-  let fixture: ComponentFixture<UsersCursorComponent>;
+describe('RemoteArtboardsComponent', () => {
+  let component: RemoteArtboardsComponent;
+  let fixture: ComponentFixture<RemoteArtboardsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UsersCursorComponent ]
+      declarations: [ RemoteArtboardsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UsersCursorComponent);
+    fixture = TestBed.createComponent(RemoteArtboardsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

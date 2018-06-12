@@ -39,7 +39,8 @@ import { ToolsLineWeightComponent } from './components/tools-line-weight/tools-l
 import { ToolsBackgroundImageComponent } from './components/tools-background-image/tools-background-image.component'
 import { ToolsPaintToolsComponent } from './components/tools-paint-tools/tools-paint-tools.component'
 import { ToolsPaletteComponent } from './components/tools-palette/tools-palette.component'
-import { UsersCursorComponent } from './components/users-cursor/users-cursor.component'
+import { RemoteCursorsComponent } from './components/remote-cursors/remote-cursors.component'
+import { RemoteArtboardsComponent } from './components/remote-artboards/remote-artboards.component'
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { UsersCursorComponent } from './components/users-cursor/users-cursor.com
     ToolsBackgroundImageComponent,
     ToolsPaintToolsComponent,
     ToolsPaletteComponent,
-    UsersCursorComponent
+    RemoteCursorsComponent,
+    RemoteArtboardsComponent
   ],
   imports: [
     BrowserModule,

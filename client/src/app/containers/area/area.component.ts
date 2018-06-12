@@ -29,10 +29,7 @@ export class AreaComponent {
     this.windowWidth = (window.innerWidth - 168).toString()
     this.windowHeight = window.innerHeight.toString()
 
-    this.p2p.connections.subscribe(e => { 
-      this.connections = e 
-      this.getCursorData()
-    })
+    this.p2p.connections.subscribe(e => { this.connections = e })
   }
 
   ngOnInit() {
@@ -135,17 +132,6 @@ export class AreaComponent {
           drawParam: this.drawParam
         }))
       }
-    })
-  }
-
-  private getCursorData() {
-    this.connections.forEach(conn => {
-      conn.on('data', e => { 
-        const data = JSON.parse(e)
-
-        if (!data.proccessing) this.ctx.beginPath()
-        if (data.proccessing) DrawFunction(this.ctx, data.drawParam, data.positions, this.windowWidth, this.windowHeight)
-      })
     })
   }
 }

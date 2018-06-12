@@ -3,12 +3,12 @@ import { WorkSpaceP2PService } from '../../containers/work-space/work-space.peer
 import { RemoteCursor } from '../../models/RemoteCursor'
 
 @Component({
-  selector: 'users-cursor',
-  templateUrl: './users-cursor.component.html',
-  styleUrls: ['./users-cursor.component.styl']
+  selector: 'remote-cursors',
+  templateUrl: './remote-cursors.component.html',
+  styleUrls: ['./remote-cursors.component.styl']
 })
 
-export class UsersCursorComponent {
+export class RemoteCursorsComponent {
   @ViewChild('cursors') cursors: ElementRef
   cursorsId: Array<any> = []
 
