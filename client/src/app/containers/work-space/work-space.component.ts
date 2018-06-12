@@ -3,6 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router'
 import { WorkSpaceService } from './work-space.service'
 import { WorkSpaceP2PService } from './work-space.peer-to-peer.service'
 import { StoreService } from '../../app.store.service'
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'work-space',
@@ -12,6 +13,8 @@ import { StoreService } from '../../app.store.service'
 
 export class WorkSpaceComponent {
   slugId: string = ''
+  windowWidth: number
+  windowHeight: number
 
   constructor(private activatedRoute: ActivatedRoute, private workSpace: WorkSpaceService, 
               private st: StoreService, private router: Router, private p2p: WorkSpaceP2PService) {
@@ -27,14 +30,35 @@ export class WorkSpaceComponent {
         this.workSpace.createArtBoard().subscribe(res => { this.router.navigate(['artboard', res.slug]) })
       }
     })
+
+    this.windowWidth = window.innerWidth - 168
+    this.windowHeight = window.innerHeight
   }
 
-  private uploadImage() {
+  private async uploadImage() {
+    const artboardsContainer = <any>document.getElementById('remotertboards')
+    const artBoards = [].slice.call(artboardsContainer.querySelectorAll('canvas'))
     const artBoard = <HTMLCanvasElement>document.getElementById('artBoard')
+
+    artBoards.push(artBoard)
+
+    const img = await this.combineCanvases(artBoards)
+
     if (!artBoard) return
-    const dataURL = artBoard.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "")
+    const dataURL = img.replace(/^data:image\/(png|jpg);base64,/, "")
 
     this.workSpace.updateArtBoard(this.slugId, dataURL).subscribe(res => res)
+  }
+
+  private async combineCanvases(artboards) {
+    let tmpCnavas = document.createElement('canvas')
+    tmpCnavas.width = this.windowWidth
+    tmpCnavas.height = this.windowHeight
+    let tmpCtx = tmpCnavas.getContext('2d')
+
+    artboards.reverse().forEach(async a => { tmpCtx.drawImage(a, 0, 0) })
+
+    return await tmpCnavas.toDataURL()
   }
 
   private connectToHub() {
