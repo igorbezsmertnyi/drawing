@@ -5,7 +5,6 @@ import { BoundingRect } from '../../models/BoundingRect'
 import { StoreService } from '../../app.store.service'
 import { WorkSpaceP2PService } from '../../containers/work-space/work-space.peer-to-peer.service'
 import DrawFunction from '../../helper/drawFunction'
-import ClickFunction from '../../helper/clickFunction'
 
 @Component({
   selector: 'app-area',
@@ -15,7 +14,6 @@ import ClickFunction from '../../helper/clickFunction'
 
 export class AreaComponent {
   proccessing: boolean = false
-  changeBg: boolean = false
   ctx: any = null
   canvasPostion: BoundingRect
   mousePosition: MousePosition = initialMousePosition
@@ -31,7 +29,6 @@ export class AreaComponent {
     this.windowWidth = (window.innerWidth - 168).toString()
     this.windowHeight = window.innerHeight.toString()
 
-    this.st.backgroundColor.subscribe(e => { this.changeBg = e })
     this.p2p.connections.subscribe(e => { 
       this.connections = e 
       this.getCursorData()
@@ -52,7 +49,7 @@ export class AreaComponent {
     this.updateParms()
   }
 
-  coordinates(e) {
+  mouseMove(e) {
     this.mousePosition.posX = e.clientX - this.canvasPostion.left
     this.mousePosition.posY = e.clientY - this.canvasPostion.top
     this.st.mouseCoordinate(this.mousePosition)
@@ -60,33 +57,39 @@ export class AreaComponent {
     this.drawing()
   }
 
-  drawStart() { 
-    this.proccessing = true 
-    this.ctx.beginPath()
+  mouseDown() { 
+    this.proccessing = true
+    this.ctx.beginPath() 
+    this.st.proccessingState(true)
   }
 
-  drawEnd() { 
+  mouseUp() {
     this.proccessing = false 
+    this.st.proccessingState(false)
     this.st.changeBackground(false)
   }
 
-  clickFunctions() {
-    if (this.drawParam.paintTool == 'color_fill') {
-      this.drawParam.bgColor = this.drawParam.color
+  clicked() {
+    if (this.drawParam.paintTool == 'color_fill' || this.drawParam.paintTool == 'clear') {
+      this.proccessing = true
+      this.st.proccessingState(true)
+
+      this.drawing()
+      this.sendCursorData()
+
+      this.proccessing = false
+      this.st.proccessingState(false)
     }
-
-    ClickFunction(this.ctx, this.drawParam, this.windowWidth, this.windowHeight)
-
-    this.st.changeBackground(true)
-    this.sendCursorData()
-    this.st.proccessingState(false)
   }
 
-  private drawing() {
+  drawing() {
     if (!this.proccessing) return
-    this.st.proccessingState(true)
-
-    DrawFunction(this.ctx, this.drawParam, this.mousePosition)
+    if (this.drawParam.paintTool == 'color_fill' || this.drawParam.paintTool == 'clear') {
+      this.drawParam.bgColor = this.drawParam.color
+      this.st.changeBackground(true)
+    }
+  
+    DrawFunction(this.ctx, this.drawParam, this.mousePosition, this.windowWidth, this.windowHeight)
   }
 
   private updateParms() {
@@ -129,8 +132,7 @@ export class AreaComponent {
           id: conn._id,
           positions: this.mousePosition,
           proccessing: this.proccessing,
-          drawParam: this.drawParam,
-          clicked: this.changeBg
+          drawParam: this.drawParam
         }))
       }
     })
@@ -142,11 +144,7 @@ export class AreaComponent {
         const data = JSON.parse(e)
 
         if (!data.proccessing) this.ctx.beginPath()
-        if (data.proccessing) DrawFunction(this.ctx, data.drawParam, data.positions)
-        if (data.clicked && data.drawParam.paintTool == 'color_fill' ||
-            data.drawParam.paintTool == 'clear') {
-          ClickFunction(this.ctx, data.drawParam, this.windowWidth, this.windowHeight)
-        }
+        if (data.proccessing) DrawFunction(this.ctx, data.drawParam, data.positions, this.windowWidth, this.windowHeight)
       })
     })
   }

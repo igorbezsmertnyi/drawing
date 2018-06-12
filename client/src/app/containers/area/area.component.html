@@ -1,10 +1,10 @@
 <section class="area">
   <canvas 
     #canv
-    (mousemove)="coordinates($event)"
-    (mousedown)="drawStart()"
-    (mouseup)="drawEnd()"
-    (click)="clickFunctions()"
+    (mousemove)="mouseMove($event)"
+    (mousedown)="mouseDown()"
+    (mouseup)="mouseUp()"
+    (click)="clicked()"
     class="area__canvas"
     id="artBoard"
   ></canvas>

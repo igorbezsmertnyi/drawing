@@ -35,12 +35,6 @@ export class CursorComponent {
           g = (255 - parseInt(this.hex.slice(2, 4), 16)),
           b = (255 - parseInt(this.hex.slice(4, 6), 16))
 
-    const sum = r + g + b
-
-    if (sum > 382.5) {
-      this.invertedColor = '#ffffff'
-    } else {
-      this.invertedColor = '#000000'
-    }
+    this.invertedColor = `rgb(${r}, ${g}, ${b})`
   }
 }
