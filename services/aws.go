@@ -44,7 +44,7 @@ func Upload(slug string, dataURL string) (string, error) {
 		buff, _ := base64.StdEncoding.DecodeString(dataURL)
 		res, err := Uploader.Upload(&s3manager.UploadInput{
 			Bucket:      aws.String(os.Getenv("S3_BUCKET")),
-			Key:         aws.String(filepath.Base(slug + ".jpg")),
+			Key:         aws.String(filepath.Base(slug + ".png")),
 			ACL:         aws.String("public-read"),
 			ContentType: aws.String("image/png"),
 			Body:        bytes.NewReader(buff),

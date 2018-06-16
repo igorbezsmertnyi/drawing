@@ -3,7 +3,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router'
 import { WorkSpaceService } from './work-space.service'
 import { WorkSpaceP2PService } from './work-space.peer-to-peer.service'
 import { StoreService } from '../../app.store.service'
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'work-space',

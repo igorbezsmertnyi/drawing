@@ -41,6 +41,7 @@ import { ToolsPaintToolsComponent } from './components/tools-paint-tools/tools-p
 import { ToolsPaletteComponent } from './components/tools-palette/tools-palette.component'
 import { RemoteCursorsComponent } from './components/remote-cursors/remote-cursors.component'
 import { RemoteArtboardsComponent } from './components/remote-artboards/remote-artboards.component'
+import { ToolsDownloadPicComponent } from './components/tools-download-pic/tools-download-pic.component'
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { RemoteArtboardsComponent } from './components/remote-artboards/remote-a
     ToolsPaintToolsComponent,
     ToolsPaletteComponent,
     RemoteCursorsComponent,
-    RemoteArtboardsComponent
+    RemoteArtboardsComponent,
+    ToolsDownloadPicComponent
   ],
   imports: [
     BrowserModule,
