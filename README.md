@@ -4,6 +4,10 @@ ___
 
 Web application for drawing the picture with your friends in real-time on one artboard by using Peer to Peer connection.
 
+<div style="display:flex;">
+<img src="./static/drawing.gif" />
+<img src="./static/drawing.gif" />
+</div>
 
 # Installation
 
