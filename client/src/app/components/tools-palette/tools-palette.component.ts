@@ -21,7 +21,13 @@ export class ToolsPaletteComponent {
     '#FF0000'
   ]
 
-  constructor(private st: StoreService) { }
+  constructor(private st: StoreService) {
+    this.st.color.subscribe(e => { 
+      this.selectedColor = e 
+
+      console.log(e)
+    })
+  }
 
   changeColor(e) {
     this.selectedColor = e

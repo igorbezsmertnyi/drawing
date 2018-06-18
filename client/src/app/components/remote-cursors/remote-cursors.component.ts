@@ -12,9 +12,7 @@ export class RemoteCursorsComponent {
   @ViewChild('cursors') cursors: ElementRef
   cursorsId: Array<any> = []
 
-  constructor(private p2p: WorkSpaceP2PService, private renderer: Renderer2) { }
-
-  ngOnInit() {
+  constructor(private p2p: WorkSpaceP2PService, private renderer: Renderer2) {
     this.p2p.connections.subscribe(e => { this.getConnection(e) })
     this.p2p.disconnected.subscribe(e => { this.removeCursorIfDisconected(e) })
   }

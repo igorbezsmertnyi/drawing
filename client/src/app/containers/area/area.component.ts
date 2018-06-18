@@ -1,10 +1,12 @@
 import { Component, ViewChild, ElementRef, Renderer2 } from '@angular/core'
 import { MousePosition, initialMousePosition } from '../../models/MousePosition'
 import { DrawParam, initialDrawParam } from '../../models/DrawParam'
+import { initialClickAction } from '../../models/ClickAction'
 import { BoundingRect } from '../../models/BoundingRect'
 import { StoreService } from '../../app.store.service'
 import { WorkSpaceP2PService } from '../../containers/work-space/work-space.peer-to-peer.service'
 import DrawFunction from '../../helper/drawFunction'
+import RgbaToHex from '../../helper/rgbaToHex'
 
 @Component({
   selector: 'app-area',
@@ -21,6 +23,7 @@ export class AreaComponent {
   windowWidth: string
   windowHeight: string
   connections: Array<any> = []
+  clickActions: Array<string> = initialClickAction
 
   @ViewChild('canv') canvas: ElementRef
 
@@ -58,6 +61,7 @@ export class AreaComponent {
     this.proccessing = true
     this.ctx.beginPath() 
     this.st.proccessingState(true)
+    // this.pickColor()
   }
 
   mouseUp() {
@@ -67,12 +71,13 @@ export class AreaComponent {
   }
 
   clicked() {
-    if (this.drawParam.paintTool == 'color_fill' || this.drawParam.paintTool == 'clear') {
+    if (this.clickActions.includes(this.drawParam.paintTool)) {
       this.proccessing = true
       this.st.proccessingState(true)
 
       this.drawing()
       this.sendCursorData()
+      this.pickColor()
 
       this.proccessing = false
       this.st.proccessingState(false)
@@ -81,7 +86,7 @@ export class AreaComponent {
 
   drawing() {
     if (!this.proccessing) return
-    if (this.drawParam.paintTool == 'color_fill' || this.drawParam.paintTool == 'clear') {
+    if (this.clickActions.includes(this.drawParam.paintTool)) {
       this.drawParam.bgColor = this.drawParam.color
       this.st.changeBackground(true)
     }
@@ -120,6 +125,11 @@ export class AreaComponent {
         this.drawParam.lineCap = 'butt'
         break
     }
+  }
+
+  private pickColor() {
+    const data = this.ctx.getImageData(this.mousePosition.posX, this.mousePosition.posY, 1, 1).data
+    this.st.changeColor(RgbaToHex(data))
   }
 
   private sendCursorData() {

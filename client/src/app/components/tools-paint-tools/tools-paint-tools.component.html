@@ -21,6 +21,15 @@
 
     <div 
       class="tools-item__button" 
+      [ngClass]="selectedTool == 'pick' && 'tools-item__button--selected'"
+      matTooltip="pick color"
+      (click)="changeTool('pick')"
+    >
+      <i class="material-icons">colorize</i>
+    </div>
+
+    <div 
+      class="tools-item__button" 
       [ngClass]="selectedTool == 'eraser' && 'tools-item__button--selected'"
       matTooltip="eraser"
       (click)="changeTool('eraser')"
