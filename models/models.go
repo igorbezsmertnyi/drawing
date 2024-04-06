@@ -19,7 +19,7 @@ func Connect() (*sql.DB, error) {
 	dbURL := os.Getenv("DATABASE_URL")
 
 	if dbURL == "" {
-		dbURL = "user=postgres dbname=postgres sslmode=disable"
+		dbURL = "user=postgres dbname=postgres password=postgres sslmode=disable"
 	}
 
 	db, err := sql.Open("postgres", dbURL)

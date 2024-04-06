@@ -62,7 +62,20 @@ export class WorkSpaceP2PService {
 
   //createPeer used for creating new Peer. isLocal state used for offer command
   private createPeer(isLocal: boolean = true) {
-    const pc = new Peer({ initiator: isLocal, trickle: false })
+    const pc = new Peer({
+      initiator: isLocal,
+      trickle: false,
+      config: {
+        iceServers: [
+          {
+            urls: 'stun:stun.l.google.com:19302'
+          }, 
+          {
+            urls: 'stun:global.stun.twilio.com:3478'
+          }
+        ],
+      },
+    })
 
     pc.on('close', () => { this.onClose(pc) })
     pc.on('error', err => { this.onError(pc, err) })
